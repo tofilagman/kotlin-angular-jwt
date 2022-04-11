@@ -4,50 +4,37 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "tuser")
-data class User (
+class User {
+
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id")
-        val ID: Long,
+        var id: Long = 0
 
-        @NotBlank
         @Column(name = "user_name")
-        @Size(max =20)
-        val UserName: String,
+        var userName: String = ""
 
         @Column(name = "password")
-        val Password: String,
+        var password: String = ""
 
         @Column(name = "email")
-        val Email: String,
+        var email: String = ""
 
-        @Column(name = "uid")
-        val UID: String,
+        @ManyToMany(fetch = FetchType.LAZY)
+        @JoinTable(
+                name = "tuser_roles",
+                joinColumns = [JoinColumn(name = "id_user")],
+                inverseJoinColumns = [JoinColumn(name = "id_role")]
+        )
+        var roles: Set<Role> = emptySet()
 
-        @Column(name = "status_type")
-        val StatusType: Int,
-
-        @Column(name = "public_key")
-        val PublicKey: String,
-
-        @Column(name = "private_key")
-        val PrivateKey: String,
-
-        @Column(name = "token")
-        val Token : String,
-
-        @Column(name = "contact_no")
-        val ContactNo: String,
-
-        @Column(name = "id_user_created")
-        val ID_UserCreated: Long,
-
-        @Column(name = "udf1")
-        val UDF1: String?,
-
-        @Column(name = "udf2")
-        val UDF2: String?,
-
-        @Column(name = "udf3")
-        val UDF3: String?
-)
+        constructor(
+                userName: String,
+                password: String,
+                email: String
+        ) {
+                this.userName = userName
+                this.password = password
+                this.email = email
+        }
+}
